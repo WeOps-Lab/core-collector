@@ -1,0 +1,5 @@
+core-collector
+.idea
+.vscode
+vendor
+bin

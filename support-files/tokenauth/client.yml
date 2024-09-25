@@ -1,0 +1,26 @@
+receivers:
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      memory:
+
+exporters:
+  otlphttp:
+    endpoint: "http://127.0.0.1:4318"
+    auth:
+      authenticator: bearertokenauth
+
+extensions:
+  bearertokenauth:
+    token: "demo"
+
+service:
+  extensions: [ bearertokenauth ]
+  telemetry:
+    metrics:
+      level: none
+  pipelines:
+    metrics:
+      receivers: [ hostmetrics ]
+      processors: [ ]
+      exporters: [ otlphttp ]
