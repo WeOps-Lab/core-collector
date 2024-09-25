@@ -4,6 +4,13 @@ dist:
   output_path: ./cmd
   otelcol_version: 0.109.0
 
+providers:
+  - gomod: go.opentelemetry.io/collector/confmap/provider/envprovider v1.15.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/fileprovider v1.15.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/httpprovider v0.109.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/httpsprovider v0.109.0
+  - gomod: go.opentelemetry.io/collector/confmap/provider/yamlprovider v0.109.0
+
 connectors:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/connector/countconnector v0.109.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/connector/exceptionsconnector v0.109.0
@@ -86,8 +93,6 @@ receivers:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver v0.109.0
 
 
-
-
 extensions:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension v0.109.0
   - gomod: go.opentelemetry.io/collector/extension/zpagesextension v0.109.0
@@ -100,4 +105,4 @@ extensions:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/filestorage v0.109.0
 
 replaces:
-  - github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension  => ../extensions/tokenauthextension
+  - github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension  => ../extension/tokenauthextension

@@ -467,4 +467,4 @@ require (
 	skywalking.apache.org/repo/goapi v0.0.0-20240104145220-ba7202308dd4 // indirect
 )
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension => ../extensions/tokenauthextension
+replace github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension => ./../extension/tokenauthextension

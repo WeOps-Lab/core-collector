@@ -12,3 +12,6 @@ dev-release:
 	go mod tidy && \
 	go mod vendor && \
 	GO111MODULE=on CGO_ENABLED=0 go build -o ../bin/core-collector
+
+push:
+	git add . && codegpt commit . && git push
