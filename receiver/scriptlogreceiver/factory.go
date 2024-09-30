@@ -15,7 +15,7 @@ func NewFactory() receiver.Factory {
 	return receiver.NewFactory(
 		component.MustNewType("scriptlog"),
 		createDefaultConfig,
-		receiver.WithMetrics(createLogReceiver, component.StabilityLevelBeta))
+		receiver.WithLogs(createLogReceiver, component.StabilityLevelBeta))
 }
 
 func createDefaultConfig() component.Config {
@@ -29,8 +29,8 @@ func createLogReceiver(
 	_ context.Context,
 	params receiver.Settings,
 	cfg component.Config,
-	nextConsumer consumer.Metrics,
-) (receiver.Metrics, error) {
+	nextConsumer consumer.Logs,
+) (receiver.Logs, error) {
 	rCfg := cfg.(*Config)
 	return newScriptLogReciever(params, rCfg, nextConsumer), nil
 }

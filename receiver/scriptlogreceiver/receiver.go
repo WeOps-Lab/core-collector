@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/consumer"
+	"go.opentelemetry.io/collector/pdata/plog"
 	"go.opentelemetry.io/collector/receiver"
 	"go.uber.org/zap"
 	"os/exec"
@@ -69,7 +70,14 @@ func (slr *scriptLogReceiver) executeScript() {
 	}
 
 	// Placeholder for processing output and sending to nextConsumer
-	slr.params.Logger.Info("script output", zap.String("output", string(output)))
+	slr.params.Logger.Debug("script output", zap.String("output", string(output)))
+
+	logs := plog.NewLogs()
+	rls := logs.ResourceLogs().AppendEmpty()
+	ils := rls.ScopeLogs().AppendEmpty()
+	logRecord := ils.LogRecords().AppendEmpty()
+	logRecord.Body().SetStr(string(output))
+	slr.nextConsumer.ConsumeLogs(context.Background(), logs)
 }
 
 func (slr *scriptLogReceiver) Shutdown(ctx context.Context) error {
