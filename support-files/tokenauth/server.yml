@@ -16,7 +16,7 @@ extensions:
     redis_password: password
 
 service:
-  extensions: [tokenauth]
+  extensions: [tokenauth,sidecar]
   telemetry:
     logs:
       level: debug

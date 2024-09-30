@@ -55,6 +55,7 @@ import (
 	spanprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanprocessor"
 	tailsamplingprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor"
 	transformprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
+	scriptlogreceiver "go.opentelemetry.io/collector/receiver/scriptlogreceiver"
 	otlpreceiver "go.opentelemetry.io/collector/receiver/otlpreceiver"
 	nopreceiver "go.opentelemetry.io/collector/receiver/nopreceiver"
 	activedirectorydsreceiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/activedirectorydsreceiver"
@@ -124,6 +125,7 @@ func components() (otelcol.Factories, error) {
 	factories.ExtensionModules[filestorage.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/filestorage v0.109.0"
 
 	factories.Receivers, err = receiver.MakeFactoryMap(
+		scriptlogreceiver.NewFactory(),
 		otlpreceiver.NewFactory(),
 		nopreceiver.NewFactory(),
 		activedirectorydsreceiver.NewFactory(),
@@ -166,6 +168,7 @@ func components() (otelcol.Factories, error) {
 		return otelcol.Factories{}, err
 	}
 	factories.ReceiverModules = make(map[component.Type]string, len(factories.Receivers))
+	factories.ReceiverModules[scriptlogreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/scriptlogreceiver v0.109.0"
 	factories.ReceiverModules[otlpreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/otlpreceiver v0.109.0"
 	factories.ReceiverModules[nopreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/nopreceiver v0.109.0"
 	factories.ReceiverModules[activedirectorydsreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/activedirectorydsreceiver v0.109.0"
