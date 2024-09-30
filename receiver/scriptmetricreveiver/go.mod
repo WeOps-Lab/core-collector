@@ -1,4 +1,4 @@
-module github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptlogreceiver
+module github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptmetricreveiver
 
 go 1.23.0
 

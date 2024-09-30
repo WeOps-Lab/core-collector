@@ -56,6 +56,7 @@ import (
 	tailsamplingprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor"
 	transformprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
 	scriptlogreceiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptlogreceiver"
+	scriptmetricreveiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptmetricreveiver"
 	otlpreceiver "go.opentelemetry.io/collector/receiver/otlpreceiver"
 	nopreceiver "go.opentelemetry.io/collector/receiver/nopreceiver"
 	activedirectorydsreceiver "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/activedirectorydsreceiver"
@@ -126,6 +127,7 @@ func components() (otelcol.Factories, error) {
 
 	factories.Receivers, err = receiver.MakeFactoryMap(
 		scriptlogreceiver.NewFactory(),
+		scriptmetricreveiver.NewFactory(),
 		otlpreceiver.NewFactory(),
 		nopreceiver.NewFactory(),
 		activedirectorydsreceiver.NewFactory(),
@@ -169,6 +171,7 @@ func components() (otelcol.Factories, error) {
 	}
 	factories.ReceiverModules = make(map[component.Type]string, len(factories.Receivers))
 	factories.ReceiverModules[scriptlogreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptlogreceiver v0.109.0"
+	factories.ReceiverModules[scriptmetricreveiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptmetricreveiver v0.109.0"
 	factories.ReceiverModules[otlpreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/otlpreceiver v0.109.0"
 	factories.ReceiverModules[nopreceiver.NewFactory().Type()] = "go.opentelemetry.io/collector/receiver/nopreceiver v0.109.0"
 	factories.ReceiverModules[activedirectorydsreceiver.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/activedirectorydsreceiver v0.109.0"

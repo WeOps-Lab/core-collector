@@ -1,0 +1,46 @@
+receivers:
+  scriptmetric/local_shell_command:
+    script_type: "shell"
+    script_content: "export host=$(hostname); ps -e | wc -l | awk -v host=\"$host\" '{print \"process_count: \"$1\" host=\"host}'"
+    collection_interval: 5s
+    execution_mode: "local"
+    timeout: 5s
+
+  scriptmetric/local_python_command:
+    script_type: "python"
+    script_content: |
+      print(f'process_count: "1" host="2"')
+    collection_interval: 5s
+    execution_mode: "local"
+    python_interpreter: "python3"
+    timeout: 5s
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 100000
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 4000
+    spike_limit_mib: 800
+
+  attributes/tenant_info:
+    actions:
+      - key: tenant_id
+        value: "core"
+        action: insert
+
+exporters:
+  otlphttp:
+    endpoint: "http://127.0.0.1:4318"
+
+service:
+  telemetry:
+    metrics:
+      level: none
+  pipelines:
+    metrics:
+      receivers: [ scriptmetric/local_shell_command, scriptmetric/local_python_command ]
+      processors: [ batch, memory_limiter, attributes/tenant_info ]
+      exporters: [ otlphttp ]

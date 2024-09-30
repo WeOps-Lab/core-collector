@@ -1,4 +1,4 @@
-package scriptlogreceiver
+package scriptmetricreceiver
 
 import (
 	"context"
@@ -12,12 +12,13 @@ var defaultScriptType = "bash"
 var defaultCollectionInterval = 10 * time.Second
 var defaultTimeout = 5 * time.Second
 var defaultExecutionMode = "local"
+var defaultPythonInterpreter = "python"
 
 func NewFactory() receiver.Factory {
 	return receiver.NewFactory(
-		component.MustNewType("scriptlog"),
+		component.MustNewType("scriptmetric"),
 		createDefaultConfig,
-		receiver.WithLogs(createLogReceiver, component.StabilityLevelBeta))
+		receiver.WithMetrics(createMetricReceiver, component.StabilityLevelBeta))
 }
 
 func createDefaultConfig() component.Config {
@@ -26,15 +27,16 @@ func createDefaultConfig() component.Config {
 		CollectionInterval: defaultCollectionInterval,
 		Timeout:            defaultTimeout,
 		ExecutionMode:      defaultExecutionMode,
+		PythonInterpreter:  defaultPythonInterpreter,
 	}
 }
 
-func createLogReceiver(
+func createMetricReceiver(
 	_ context.Context,
 	params receiver.Settings,
 	cfg component.Config,
-	nextConsumer consumer.Logs,
-) (receiver.Logs, error) {
-	rCfg := cfg.(*Config)
-	return newScriptLogReciever(params, rCfg, nextConsumer), nil
+	nextConsumer consumer.Metrics,
+) (receiver.Metrics, error) {
+	mCfg := cfg.(*Config)
+	return newScriptMetricReceiver(params, mCfg, nextConsumer), nil
 }

@@ -66,6 +66,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/redisreceiver v0.109.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/saphanareceiver v0.109.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptlogreceiver v0.109.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptmetricreveiver v0.109.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/simpleprometheusreceiver v0.109.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/skywalkingreceiver v0.109.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/snmpreceiver v0.109.0
@@ -269,6 +270,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/melbahja/goph v1.4.0 // indirect
 	github.com/microsoft/go-mssqldb v1.7.2 // indirect
 	github.com/miekg/dns v1.1.61 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -469,3 +471,5 @@ require (
 replace github.com/open-telemetry/opentelemetry-collector-contrib/extension/tokenauthextension => ../extension/tokenauthextension
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptlogreceiver => ../receiver/scriptlogreceiver
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/scriptmetricreveiver => ../receiver/scriptmetricreveiver

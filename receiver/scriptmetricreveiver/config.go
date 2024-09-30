@@ -1,4 +1,4 @@
-package scriptlogreceiver
+package scriptmetricreceiver
 
 import (
 	"fmt"
@@ -10,13 +10,14 @@ type Config struct {
 	ScriptType         string        `mapstructure:"script_type"`
 	ScriptContent      string        `mapstructure:"script_content"`
 	CollectionInterval time.Duration `mapstructure:"collection_interval"`
-	ExecutionMode      string        `mapstructure:"execution_mode"` // local or remote
-	Protocol           string        `mapstructure:"protocol"`       // ssh
+	ExecutionMode      string        `mapstructure:"execution_mode"`
+	Protocol           string        `mapstructure:"protocol"`
 	SSHUser            string        `mapstructure:"ssh_user"`
 	SSHPassword        string        `mapstructure:"ssh_password"`
 	SSHKeyPath         string        `mapstructure:"ssh_key_path"`
 	Host               string        `mapstructure:"host"`
-	Timeout            time.Duration `mapstructure:"timeout"` // script execution timeout
+	Timeout            time.Duration `mapstructure:"timeout"`
+	PythonInterpreter  string        `mapstructure:"python_interpreter"`
 }
 
 func (cfg *Config) Unmarshal(componentParser *confmap.Conf) error {
@@ -24,28 +25,22 @@ func (cfg *Config) Unmarshal(componentParser *confmap.Conf) error {
 }
 
 func (cfg *Config) Validate() error {
-	// Ensure ScriptType is valid
 	switch cfg.ScriptType {
 	case "shell", "bash", "python":
-		// valid script types
 	default:
 		return fmt.Errorf("invalid script type: %s", cfg.ScriptType)
 	}
 
-	// Ensure ScriptContent is provided
 	if cfg.ScriptContent == "" {
 		return fmt.Errorf("script content must not be empty")
 	}
 
-	// Ensure ExecutionMode is valid
 	switch cfg.ExecutionMode {
 	case "local", "remote":
-		// valid execution modes
 	default:
 		return fmt.Errorf("invalid execution mode: %s", cfg.ExecutionMode)
 	}
 
-	// If remote execution, ensure Protocol, Host, and authentication are provided
 	if cfg.ExecutionMode == "remote" {
 		if cfg.Protocol == "ssh" {
 			if cfg.Host == "" {
@@ -62,7 +57,6 @@ func (cfg *Config) Validate() error {
 		}
 	}
 
-	// Ensure CollectionInterval and Timeout are valid
 	if cfg.CollectionInterval <= 0 {
 		return fmt.Errorf("collection interval must be greater than 0")
 	}

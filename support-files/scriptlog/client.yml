@@ -1,8 +1,28 @@
 receivers:
-  scriptlog:
+  scriptlog/local_shell_command:
     script_type: "shell"
-    script_content: "echo Hello, World!"
+    script_content: "echo Hello, Local Shell Script!"
     collection_interval: 5s
+    execution_mode: "local"
+    timeout: 5s
+
+  scriptlog/local_python_command:
+    script_type: "python"
+    script_content: "print('Hello, Local Python Script!')"
+    collection_interval: 5s
+    execution_mode: "local"
+    timeout: 5s
+
+  scriptlog/remote_shell_command:
+    script_type: "shell"
+    script_content: "ps -ef"
+    collection_interval: 10s
+    execution_mode: "remote"
+    protocol: "ssh"
+    host: ""           # 替换为实际的远程主机地址
+    ssh_user: ""     # 替换为实际的SSH用户名
+    ssh_password: "" # 替换为实际的SSH密码
+    timeout: 5s
 
 processors:
   batch:
@@ -30,6 +50,6 @@ service:
       level: none
   pipelines:
     logs:
-      receivers: [ scriptlog ]
+      receivers: [ scriptlog/local_shell_command,scriptlog/local_python_command,scriptlog/remote_shell_command ]
       processors: [ attributes/tenant_info ]
       exporters: [ otlphttp ]
