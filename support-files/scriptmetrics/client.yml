@@ -1,19 +1,24 @@
 receivers:
   scriptmetric/local_shell_command:
-    script_type: "shell"
-    script_content: "export host=$(hostname); ps -e | wc -l | awk -v host=\"$host\" '{print \"process_count: \"$1\" host=\"host}'"
+    script_type: "bash"
+    script_content: |
+      export host=$(hostname); 
+      ps -e | wc -l | awk -v host="$host" '{print "process_count: "$1" host="host}'
     collection_interval: 5s
     execution_mode: "local"
-    timeout: 5s
+    timeout: 3s
 
   scriptmetric/local_python_command:
     script_type: "python"
     script_content: |
-      print(f'process_count: "1" host="2"')
+      import os
+      host = os.uname()[1]
+      print(f'process_count: 1 host={host}')
+      print(f'mem_count: 2 host={host}')
     collection_interval: 5s
     execution_mode: "local"
     python_interpreter: "python3"
-    timeout: 5s
+    timeout: 3s
 
 processors:
   batch:

@@ -55,7 +55,6 @@ func (smr *scriptMetricReceiver) start(ctx context.Context) {
 		}
 	}
 }
-
 func (smr *scriptMetricReceiver) collectMetrics(ctx context.Context) {
 	var output []byte
 	var err error
@@ -88,17 +87,25 @@ func (smr *scriptMetricReceiver) collectMetrics(ctx context.Context) {
 	scanner := bufio.NewScanner(strings.NewReader(string(output)))
 	for scanner.Scan() {
 		line := scanner.Text()
-		parts := strings.Fields(line)
-		if len(parts) < 2 {
+
+		// Split the string by colon first
+		parts := strings.SplitN(line, ":", 2)
+		if len(parts) != 2 {
 			smr.params.Logger.Error("invalid metric line", zap.String("line", line))
 			continue
 		}
 
-		metricName := parts[0]
-		metricValueStr := parts[1]
-		metricValue, err := strconv.ParseFloat(metricValueStr, 64)
+		// Metric Name and Other Values
+		metricName := strings.TrimSpace(parts[0])
+		metricVals := strings.Fields(strings.TrimSpace(parts[1]))
+		if len(metricVals) < 1 {
+			smr.params.Logger.Error("invalid metric values", zap.String("line", line))
+			continue
+		}
+
+		metricValue, err := strconv.ParseFloat(metricVals[0], 64)
 		if err != nil {
-			smr.params.Logger.Error("invalid metric value", zap.String("value", metricValueStr), zap.Error(err))
+			smr.params.Logger.Error("invalid metric value", zap.String("value", metricVals[0]), zap.Error(err))
 			continue
 		}
 
@@ -111,8 +118,8 @@ func (smr *scriptMetricReceiver) collectMetrics(ctx context.Context) {
 		dp.SetDoubleValue(metricValue)
 		dp.SetTimestamp(now)
 
-		for i := 2; i < len(parts); i++ {
-			labelParts := strings.SplitN(parts[i], "=", 2)
+		for i := 1; i < len(metricVals); i++ {
+			labelParts := strings.SplitN(metricVals[i], "=", 2)
 			if len(labelParts) == 2 {
 				dp.Attributes().PutStr(labelParts[0], labelParts[1])
 			}
@@ -134,7 +141,7 @@ func (smr *scriptMetricReceiver) executeLocalScript(ctx context.Context) ([]byte
 	var cmd *exec.Cmd
 
 	switch smr.config.ScriptType {
-	case "bash", "shell":
+	case "bash":
 		cmd = exec.CommandContext(ctx, "sh", "-c", smr.config.ScriptContent)
 	case "python":
 		cmd = exec.CommandContext(ctx, smr.config.PythonInterpreter, "-c", smr.config.ScriptContent)

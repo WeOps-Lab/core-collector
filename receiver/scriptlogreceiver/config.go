@@ -26,7 +26,7 @@ func (cfg *Config) Unmarshal(componentParser *confmap.Conf) error {
 func (cfg *Config) Validate() error {
 	// Ensure ScriptType is valid
 	switch cfg.ScriptType {
-	case "shell", "bash", "python":
+	case "bash", "python":
 		// valid script types
 	default:
 		return fmt.Errorf("invalid script type: %s", cfg.ScriptType)
@@ -69,6 +69,8 @@ func (cfg *Config) Validate() error {
 	if cfg.Timeout <= 0 {
 		return fmt.Errorf("timeout must be greater than 0")
 	}
-
+	if cfg.Timeout >= cfg.CollectionInterval {
+		return fmt.Errorf("timeout must be smaller than collection interval")
+	}
 	return nil
 }

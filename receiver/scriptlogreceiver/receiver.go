@@ -90,7 +90,7 @@ func (slr *scriptLogReceiver) executeLocalScript(ctx context.Context) ([]byte, e
 	var cmd *exec.Cmd
 
 	switch slr.config.ScriptType {
-	case "bash", "shell":
+	case "bash":
 		cmd = exec.CommandContext(ctx, "sh", "-c", slr.config.ScriptContent)
 	case "python":
 		cmd = exec.CommandContext(ctx, "python", "-c", slr.config.ScriptContent)

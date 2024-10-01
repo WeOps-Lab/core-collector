@@ -1,6 +1,6 @@
 receivers:
   scriptlog/local_shell_command:
-    script_type: "shell"
+    script_type: "bash"
     script_content: "echo Hello, Local Shell Script!"
     collection_interval: 5s
     execution_mode: "local"
